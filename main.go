@@ -9,17 +9,31 @@ import (
 	"os"
 	"strconv"
 	"strings"
+
+	"golang.org/x/crypto/ssh/terminal"
 )
 
 func main() {
-	// TODO: If os.Args length is 1, prompt for password securely
+	var password string
 
-	if len(os.Args) != 2 {
-		fmt.Printf("Usage: %s password\n", os.Args[0])
-		os.Exit(1)
+	if len(os.Args) == 1 {
+		var err error
+
+		fmt.Printf("password: ")
+		os.Stdout.Sync()
+
+		b, err := terminal.ReadPassword(int(os.Stdin.Fd()))
+		if err != nil {
+			fmt.Printf("Failed to read password: %v\n", err)
+			os.Exit(1)
+		}
+
+		password = string(b)
+		fmt.Printf("\n")
+	} else {
+		password = os.Args[1]
 	}
 
-	password := os.Args[1]
 	hash := fmt.Sprintf("%X", sha1.Sum([]byte(password)))
 
 	prefix, suffix := hash[0:5], hash[5:len(hash)]
