@@ -10,7 +10,7 @@ import (
 	"strconv"
 	"strings"
 
-	"golang.org/x/crypto/ssh/terminal"
+	"github.com/howeyc/gopass"
 )
 
 func main() {
@@ -22,7 +22,7 @@ func main() {
 		fmt.Printf("password: ")
 		os.Stdout.Sync()
 
-		b, err := terminal.ReadPassword(int(os.Stdin.Fd()))
+		b, err := gopass.GetPasswdMasked()
 		if err != nil {
 			fmt.Printf("Failed to read password: %v\n", err)
 			os.Exit(1)
