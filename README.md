@@ -12,7 +12,7 @@ Install check utility
 then run the program to test your password, you will be prompted for your password
 which will be read from the terminal.
 
-## License
+## License
 
 Copyright 2018 Geoff Garside
 
