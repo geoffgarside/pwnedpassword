@@ -10,11 +10,19 @@ import (
 	"strings"
 )
 
-var httpClient = http.DefaultClient
+var (
+	httpClient = http.DefaultClient
+	apiURL     = "https://api.pwnedpasswords.com"
+)
 
 // SetHTTPClient sets the http.Client used by the Check function
 func SetHTTPClient(client *http.Client) {
 	httpClient = client
+}
+
+// SetAPI sets the base endpoint URL
+func SetAPI(url string) {
+	apiURL = url
 }
 
 // Check checks the password against the PwnedPasswords API.
@@ -35,10 +43,9 @@ func Check(password string) (bool, error) {
 // Count uses the range based k-anonymity method to avoid leaking the
 // password to the API.
 func Count(password string) (uint64, error) {
-	hash := fmt.Sprintf("%X", sha1.Sum([]byte(password)))
-	prefix, suffix := hash[0:5], hash[5:len(hash)]
+	prefix, suffix := hash(password)
 
-	res, err := httpClient.Get("https://api.pwnedpasswords.com/range/" + prefix)
+	res, err := httpClient.Get(apiURL + "/range/" + prefix)
 	if err != nil {
 		return 0, err
 	}
@@ -48,12 +55,18 @@ func Count(password string) (uint64, error) {
 	return findSuffix(suffix, res.Body)
 }
 
+func hash(password string) (prefix, suffix string) {
+	h := fmt.Sprintf("%X", sha1.Sum([]byte(password)))
+	return h[:5], h[5:]
+}
+
 func findSuffix(suffix string, reader io.Reader) (uint64, error) {
 	scanner := bufio.NewScanner(reader)
+	suffLen := len(suffix)
 	for scanner.Scan() {
 		line := scanner.Text()
 
-		if line[0:len(suffix)] == suffix {
+		if len(line) > suffLen && line[:suffLen] == suffix {
 			p := strings.SplitN(line, ":", 2)
 			return strconv.ParseUint(p[1], 10, 64)
 		}
