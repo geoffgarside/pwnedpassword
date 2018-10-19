@@ -2,6 +2,7 @@ PwnedPassword
 =============
 
 [![GoDoc](https://godoc.org/github.com/geoffgarside/pwnedpassword?status.svg)](https://godoc.org/github.com/geoffgarside/pwnedpassword)
+[![Build Status](https://travis-ci.org/geoffgarside/pwnedpassword.svg?branch=master)](https://travis-ci.org/geoffgarside/pwnedpassword)
 [![Maintainability](https://api.codeclimate.com/v1/badges/e3b520fae3784da44850/maintainability)](https://codeclimate.com/github/geoffgarside/pwnedpassword/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/e3b520fae3784da44850/test_coverage)](https://codeclimate.com/github/geoffgarside/pwnedpassword/test_coverage)
 
