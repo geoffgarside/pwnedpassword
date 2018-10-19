@@ -23,8 +23,7 @@ func apiHandler(spec hashes) http.Handler {
 		prefix := r.URL.Path[7:]
 		suffixes, ok := spec[prefix]
 		if !ok {
-			w.Write([]byte{'\n'})
-			return
+			panic(http.ErrAbortHandler)
 		}
 
 		for _, suff := range suffixes {
@@ -68,6 +67,18 @@ func TestExported(t *testing.T) {
 		}
 
 		if !result {
+			t.Errorf("expected Check to return %v, got %v", false, result)
+		}
+	})
+
+	t.Run("HTTPError", func(t *testing.T) {
+		result, err := pwnedpassword.Check("panic")
+
+		if err == nil {
+			t.Fatalf("expected Check not return an error, got %v", err)
+		}
+
+		if result {
 			t.Errorf("expected Check to return %v, got %v", false, result)
 		}
 	})

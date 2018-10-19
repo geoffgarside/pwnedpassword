@@ -3,6 +3,7 @@ package pwnedpassword
 import (
 	"bytes"
 	"testing"
+	"testing/iotest"
 )
 
 func Test_hash(t *testing.T) {
@@ -61,6 +62,18 @@ func Test_findSuffix(t *testing.T) {
 		c, err := findSuffix("AF18FBDD4E59189F5FE768A5F8311527056", b)
 		if err != nil {
 			t.Fatalf("expected findSuffix not to return err, got %v", err)
+		}
+
+		if c != 0 {
+			t.Errorf("expected findSuffix to return 0, got %v", c)
+		}
+	})
+
+	t.Run("ScanError", func(t *testing.T) {
+		b := bytes.NewBufferString("\n")
+		c, err := findSuffix("AF18FBDD4E59189F5FE768A5F8311527056", iotest.TimeoutReader(b))
+		if err == nil {
+			t.Fatalf("expected findSuffix to return err, got %v", err)
 		}
 
 		if c != 0 {
