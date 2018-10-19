@@ -1,10 +1,15 @@
 language: go
-
 env:
-- GO111MODULE=on
-
+  global:
+  - GO111MODULE=on
+  - secure: lzfthvi/xfWrobbOhNbm62MRQy3BUhNKDarqmkA/lJzfX42abgJe96BWLe0XyalPjfBj95m01oS7KkYaMj5RTTpEpJG5EsQ8AWuWf5RphU9dioXofHq0UjuqE1yXnAttKG5Ebwsr8nk1ti2p1F0eRrlpBt45Ss2yzVZH0cSswY9zmQeCTdqoMdmUbUAHMSHInZcducI71HfsxLHeJeYQeoVPtEwb+yJzLJX5BxtVkqVbO61ntLT/Ti+m1saqNBdDe0+JPb0CeJT8Yy0gJt1Kw16reaAu50pjakqiTWhsLj/lgg1vK38c5oEXM+lvOKoszxH4EvHTyXdPOg9tSc0vQ+1XJvrNT5ysCvqOJZ1dgmsLxitVoFo19ogFoRgN9Axm6xkNJiHoUGZFCgV/We0H59PGosCons/2ZwklC0TDPfkW8Znr+L9cSAbu5dKq1/hEV6JcMzT+an7BEalQCkDBT/R1aNpwmqQB0+OeRhO3CLQ7/fmd29Qg2kg2cDZpFPW5VHgWJIoxuf0Yt2+GK+QWZ2VEOnGGBnhTeTzGcyX4RhS+MVFzL8BP4HvY3gbRNt/IladOHfMc2PZC+OLLJq/FVJN23W9I+wESuy76cMIAvHi4adhnDI/UwT5Zj9RGYKpchWiq7VDsvm8lxTlBMonwrPA5uZP2QEzKVhFsW2GmZlQ=
 go:
-- "1.10.x"
-- "1.11.x"
-
-script: go test -v -race ./...
+- 1.10.x
+- 1.11.x
+before_script:
+- curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+- chmod +x ./cc-test-reporter
+- "./cc-test-reporter before-build"
+script: go test -v -race -cover ./... -coverpkg ./... -coverprofile c.out
+after_script:
+- "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT"
