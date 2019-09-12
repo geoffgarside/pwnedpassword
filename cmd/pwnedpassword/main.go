@@ -2,23 +2,25 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 
-	"github.com/geoffgarside/pwnedpassword"
 	"github.com/howeyc/gopass"
+
+	"github.com/geoffgarside/pwnedpassword"
 )
 
 func main() {
+	log.SetFlags(0)
+
 	password, err := readPassword(os.Args)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Failed to read password: %v\n", err)
-		os.Exit(1)
+		log.Fatalf("Failed to read password: %v\n", err)
 	}
 
 	count, err := pwnedpassword.Count(password)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error checking password: scanning failed: %v\n", err)
-		os.Exit(1)
+		log.Fatalf("Error checking password: scanning failed: %v\n", err)
 	}
 
 	switch {
