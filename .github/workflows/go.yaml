@@ -36,3 +36,4 @@ jobs:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         with:
           coverageCommand: go test -v -race -cover -coverprofile=c.out ./...
+          coveragePrefix: github.com/geoffgarside/pwnedpassword
