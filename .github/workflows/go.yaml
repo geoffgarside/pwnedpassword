@@ -29,11 +29,3 @@ jobs:
 
       - name: Test
         run: go test -v ./...
-
-      - name: Coverage
-        uses: paambaati/codeclimate-action@v2.7.5
-        env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-        with:
-          coverageCommand: go test -v -race -cover -coverprofile=c.out ./...
-          prefix: github.com/geoffgarside/pwnedpassword
